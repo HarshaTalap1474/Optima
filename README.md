@@ -1,6 +1,9 @@
 # Optima
 
-Optima is a modern, full-stack smart task management application designed to maximize your productivity. It features a sleek, minimal UI built entirely with native React and custom CSS, and a powerful Node.js/Express backend that handles dynamic task prioritization.
+## 📖 Project Description
+Optima is a modern, full-stack smart task management application designed to maximize productivity and eliminate decision fatigue. Unlike traditional to-do lists that simply display items sequentially, Optima features an intelligent Node.js backend engine that dynamically calculates the priority of your tasks in real-time. By continuously analyzing your deadlines, the estimated effort required, and explicit importance ratings, Optima automatically surfaces your most critical and time-sensitive work to the top.
+
+Paired with a built-in Pomodoro focus timer, comprehensive dashboard analytics, and a seamless component-driven React interface, Optima is built to help professionals, students, and driven individuals maintain a deep state of uninterrupted focus.
 
 ## 🚀 Features
 
