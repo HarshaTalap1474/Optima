@@ -33,53 +33,73 @@ Paired with a built-in Pomodoro focus timer, comprehensive dashboard analytics, 
 
 ### Prerequisites
 
-Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
+Ensure you have [Node.js](https://nodejs.org/) installed on your machine. For a persistent database in production, you will also need a running [MongoDB](https://www.mongodb.com/) instance or a MongoDB Atlas connection string.
+
+### Configuration
+
+Copy the template environment configuration file to create your own local settings:
+
+```bash
+cp .env.example .env
+```
+
+Review the `.env` file and adjust settings as needed:
+* **`PORT`**: Server port (defaults to `5000`).
+* **`NODE_ENV`**: Set to `production` when running the production site.
+* **`MONGODB_URI`**: Required in production mode to connect to your real MongoDB database. If left blank in development, Optima will automatically start an in-memory database.
+* **`CORS_ORIGIN`**: Allowed CORS origins (defaults to `*`).
 
 ### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/HarshaTalap1474/Optima.git
-   cd Optima
-   ```
+Install dependencies for the root orchestrator, backend, and frontend with a single command:
 
-2. **Install Backend Dependencies:**
-   ```bash
-   cd backend
-   npm install
-   ```
-
-3. **Install Frontend Dependencies:**
-   ```bash
-   cd ../frontend
-   npm install
-   ```
+```bash
+npm run install:all
+```
 
 ---
 
 ## 🏃‍♂️ Running the Application
 
-Because Optima is a full-stack application, you will need to run both the backend server and the frontend client simultaneously in two separate terminal windows.
+Optima can be run in two different modes:
 
-### 1. Start the Backend Server
-Open a terminal, navigate to the `backend` folder, and start the server:
+### 1. Development Mode (Out-of-the-Box)
 
-```bash
-cd backend
-node server.js
-```
-*Note: You should see messages indicating that the server is running on port `5000` and the in-memory MongoDB is connected successfully.*
-
-### 2. Start the Frontend Application
-Open a second terminal, navigate to the `frontend` folder, and start the Vite development server:
+In development mode, you can start both the frontend Vite development server and the backend Express server concurrently in a single terminal window:
 
 ```bash
-cd frontend
 npm run dev
 ```
 
-### 3. Open the App
-Once Vite is running, it will provide a local URL (e.g., `http://localhost:5173/` or `http://localhost:5174/`). Open this URL in your web browser to start using Optima!
+* **Backend Server** runs at `http://localhost:5000` with an automatic, zero-config in-memory database.
+* **Frontend client** runs at `http://localhost:5173` with fast hot-reloads.
+* Access the app in your browser at `http://localhost:5173`.
+
+### 2. Production Mode (Server Ready)
+
+In production, the backend server acts as a unified web server, connecting to your real MongoDB database and serving the compiled frontend statically from a single port:
+
+1. **Build the frontend assets:**
+   ```bash
+   npm run build
+   ```
+   *(This compiles the React files and outputs them to the `frontend/dist` directory).*
+
+2. **Configure environment variables:**
+   Ensure your `.env` file (or your environment config provider) has:
+   ```env
+   NODE_ENV=production
+   MONGODB_URI=your_real_mongodb_connection_string
+   ```
+
+3. **Start the production server:**
+   ```bash
+   npm start
+   ```
+   *(The server will start, connect to your real database, and host the entire site).*
+
+4. **Access the website:**
+   Open `http://localhost:5000` (or whatever `PORT` you configured) in your browser.
 
 ---
 
