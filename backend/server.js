@@ -42,15 +42,27 @@ const startServer = async () => {
     let mongoServer;
 
     if (!mongoUri) {
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('MONGODB_URI or MONGO_URI environment variable is required in production.');
-      }
-      console.log('No MONGODB_URI provided. Starting MongoDB Memory Server for development...');
+      console.warn('\x1b[33m%s\x1b[0m', 'WARNING: No MONGODB_URI provided. Starting MongoDB Memory Server...');
+      console.warn('\x1b[33m%s\x1b[0m', 'Data will NOT be persistent and will be lost on server restart!');
       mongoServer = await MongoMemoryServer.create();
       mongoUri = mongoServer.getUri();
     }
+
+    try {
+      await mongoose.connect(mongoUri);
+    } catch (connectError) {
+      // If connecting to localhost failed (e.g. MongoDB is not running locally),
+      // we can fall back to the memory server so the app runs out-of-the-box for testing.
+      if (mongoUri && (mongoUri.includes('localhost') || mongoUri.includes('127.0.0.1'))) {
+        console.warn('\x1b[33m%s\x1b[0m', 'Connection to local MongoDB failed. Falling back to MongoDB Memory Server...');
+        mongoServer = await MongoMemoryServer.create();
+        mongoUri = mongoServer.getUri();
+        await mongoose.connect(mongoUri);
+      } else {
+        throw connectError;
+      }
+    }
     
-    await mongoose.connect(mongoUri);
     console.log(mongoServer ? 'Connected to In-Memory MongoDB successfully' : 'Connected to MongoDB database successfully');
     
     app.listen(PORT, () => {
